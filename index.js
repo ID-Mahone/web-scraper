@@ -4,23 +4,28 @@ const cheerio = require('cheerio');
 const express = require('express');
 
 const app = express()
-//target url
-const url = '.'
+const baseUrl = 'https://www.theguardian.com'; //target urls
+const url = `${baseUrl}/europe`;
 
-axios(url)
-    .then(response => {
-        const html = response.data
-        const $ = cheerio.load(html)
-        const articles = []
-        $('.dcr-12ilguo', html).each(function () {
-            const title = $(this).text()
-            const url = $(this).find('a').attr('href')
-            articles.push({
-                title,
-                url
+
+function fetchData() {
+    axios(url)
+        .then(response => {
+            const html = response.data
+            const $ = cheerio.load(html)
+            const articles = []
+            $('.dcr-12ilguo', html).each(function () {
+                const title = $(this).text()
+                const relativeUrl = $(this).find('a').attr('href')
+                const completeUrl = `${baseUrl}${relativeUrl}`
+                articles.push({
+                    title,
+                    url: completeUrl
+                })
             })
-        })
-        console.log(articles)
-    }).catch(err => consol.log(err))
+            console.log(articles)
+        }).catch(err => console.log(err))
+}
 
-app.listen(PORT, () => console.log("server running on PORT ${PORT}"))
+setInterval(fetchData, 5000); //fetch data every 5 seconds
+app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
