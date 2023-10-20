@@ -6,8 +6,8 @@ const app = express()
 const cors = require('cors')
 app.use(cors())
 
-const baseUrl = 'https://www.theguardian.com'; //target urls
-const url = `${baseUrl}/europe`;
+const baseUrl = '/URL'; //target urls
+const url = `${baseUrl}/`;
 
 app.get('/', function (req, res) {
     res.json('Webscraper v1.0')
@@ -22,8 +22,8 @@ app.get('/results', (req, res) => {
             const html = response.data
             const $ = cheerio.load(html)
             const articles = []
-
-            $('.dcr-12ilguo', html).each(function () {
+            //html class to fetch
+            $('.title', html).each(function () {
                 const title = $(this).text()
                 const relativeUrl = $(this).find('a').attr('href')
                 const completeUrl = `${baseUrl}${relativeUrl}`

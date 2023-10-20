@@ -14,5 +14,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
             feedDisplay.innerHTML = feedHTML;
         })
-        .catch(err => console.error(err));
+        .catch(err => console.log(err));
 });
